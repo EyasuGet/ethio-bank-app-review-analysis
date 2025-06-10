@@ -1,6 +1,8 @@
-# ethio-bank-app-review-analysis
+# Fintech App Reviews Analysis
 
 This project is part of the 10 Academy Week 2 Challenge: **Customer Experience Analytics for Fintech Apps**. The goal is to collect, analyze, and derive insights from user reviews of Ethiopian banking apps on the Google Play Store.
+
+---
 
 ## 📌 Objective
 
@@ -9,80 +11,106 @@ To simulate the role of a data analyst at a consultancy firm by:
 - Preprocessing and cleaning the data
 - Performing sentiment analysis using a transformer-based NLP model
 - Extracting recurring themes using TF-IDF
+- Storing processed data in a PostgreSQL database
 
 ---
 
 ## 🗂️ Repository Structure
+
+fintech-app-reviews-analysis/
 │
 ├── data/
-│ ├── raw_reviews.csv # Unprocessed scraped data
-│ ├── clean_reviews.csv # Cleaned data after preprocessing
-│ ├── sentiment_reviews.csv # Data with sentiment scores
-│ └── final_reviews.csv # Final data with themes added
+│ ├── raw_reviews.csv
+│ ├── clean_reviews.csv
+│ ├── sentiment_reviews.csv
+│ └── final_reviews.csv
 │
 ├── scripts/
-│ ├── scraper.py # Scrapes reviews using google-play-scraper
-│ ├── preprocess.py # Cleans and formats the raw data
-│ └── sentiment_theme.py # Sentiment analysis and keyword-based theme extraction
+│ ├── scraper.py
+│ ├── preprocess.py
+│ ├── sentiment_theme.py
+│ └── upload_to_postgres.py
 │
-├── requirements.txt # Required Python libraries
-├── README.md
-└── .gitignore
+├── .gitignore
+├── requirements.txt
+└── README.md
 
 
----
-
-## 🧪 Task 1: Data Collection and Preprocessing
-
-### ✅ Steps
-- Scraped 400+ reviews for each bank app:
-  - Commercial Bank of Ethiopia
-  - Bank of Abyssinia
-  - Dashen Bank
-- Cleaned data:
-  - Removed duplicates
-  - Handled missing values
-  - Normalized date format to `YYYY-MM-DD`
-
-### 🛠 Tools & Libraries
-- [`google-play-scraper`](https://github.com/JoMingyu/google-play-scraper)
-- `pandas`
-
-### 📁 Output
-- `data/raw_reviews.csv`
-- `data/clean_reviews.csv`
 
 ---
 
-## 🧠 Task 2: Sentiment and Thematic Analysis
+## ✅ Task 1: Scraping & Preprocessing
 
-### ✅ Steps
-- **Sentiment Analysis**:
-  - Used HuggingFace’s `distilbert-base-uncased-finetuned-sst-2-english`
-  - Annotated each review with sentiment label (POSITIVE/NEGATIVE) and confidence score
-
-- **Thematic Analysis**:
-  - Extracted keywords using `TfidfVectorizer` (unigrams and bigrams)
-  - Manually grouped recurring keywords into themes:
-    - Account Access Issues
-    - Transaction Performance
-    - Reliability Issues
-    - User Interface
-    - Feature Requests
-
-### 🛠 Tools & Libraries
-- `transformers`
-- `scikit-learn`
-- `pandas`
-
-### 📁 Output
-- `data/sentiment_reviews.csv`
-- `data/final_reviews.csv`
+- Scraped 400+ reviews per bank (CBE, BOA, Dashen)
+- Cleaned and normalized review data
+- Outputs:
+  - `data/raw_reviews.csv`
+  - `data/clean_reviews.csv`
 
 ---
 
-## ⚙️ How to Run
+## ✅ Task 2: Sentiment & Thematic Analysis
+
+- Sentiment analysis using HuggingFace DistilBERT model
+- TF-IDF keyword extraction
+- Manual theme assignment:
+  - Account Access Issues
+  - Transaction Performance
+  - Reliability Issues
+  - User Interface
+  - Feature Requests
+- Outputs:
+  - `data/sentiment_reviews.csv`
+  - `data/final_reviews.csv`
+
+---
+
+## ✅ Task 3: PostgreSQL Data Storage
+
+### 📦 Database: `bank_reviews`
+
+#### Schema:
+- `banks(id SERIAL PRIMARY KEY, name VARCHAR)`
+- `reviews(id SERIAL PRIMARY KEY, review_text TEXT, rating INT, review_date DATE, sentiment_label TEXT, sentiment_score FLOAT, theme TEXT, source TEXT, bank_id INT)`
+
+#### Steps:
+- Set up PostgreSQL locally
+- Create DB and schema
+- Load data using `upload_to_postgres.py`
+
+#### Python Script:
+- `scripts/upload_to_postgres.py`
+
+---
+## ✅ Task 4: Insights & Visualizations
+
+- **Business Insights**:
+  - Top 2 satisfaction drivers per bank
+  - Top 2 user pain points per bank
+  - Based on sentiment scores and themes
+- **Visualizations**:
+  - Sentiment Distribution per Bank
+  - Theme Frequency per Bank
+- Outputs:
+  - `data/drivers.csv`
+  - `data/pain_points.csv`
+  - `data/sentiment_distribution.png`
+  - `data/theme_frequency.png`
+
+---
+
+## ⚙️ How to Run the Project
 
 1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+
+## ⚙️ How to Run the Project
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+python scripts/scraper.py
+python scripts/preprocess.py
+python scripts/sentiment_theme.py
+python scripts/upload_to_postgres.py
