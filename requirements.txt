@@ -1,0 +1,8 @@
+pandas
+google-play-scraper
+transformers
+# torch
+scikit-learn
+psycopg2-binary
+seaborn
+matplotlib
