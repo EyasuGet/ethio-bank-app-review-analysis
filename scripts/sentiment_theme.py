@@ -1,5 +1,6 @@
 # scripts/sentiment_theme.py (continued)
 
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 import numpy as np
 
